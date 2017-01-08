@@ -1,0 +1,18 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\EndLessScene\CamControler.cs">
+    <Files>
+      <File FileName="Assets\Scripts\EndLessScene\SkyController.cs" Line="13" Column="56" />
+      <File FileName="Assets\Scripts\EndLessScene\Player.cs" Line="27" Column="45" />
+      <File FileName="Assets\Scripts\EndLessScene\CamControler.cs" Line="19" Column="3" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="C:\Unity3DFile\2DTest\Assets\Scripts\Card.cs" line="8" column="1" />
+      <Breakpoint file="C:\Unity3DFile\2DTest\Assets\Scripts\Card.cs" line="6" column="1" />
+      <Breakpoint file="C:\Unity3DFile\2DTest\Assets\Scripts\Card.cs" line="7" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
