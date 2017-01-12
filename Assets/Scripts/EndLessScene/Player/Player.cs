@@ -166,6 +166,7 @@ public class Player: MonoBehaviour {
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 		float moveVertical = Input.GetAxis ("Vertical");
 
+
 		Vector3 moment = new Vector3 (moveHorizontal, 0,moveVertical);
 
 		vector+=moment*moveSpeed;

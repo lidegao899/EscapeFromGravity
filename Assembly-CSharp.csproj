@@ -59,17 +59,6 @@
      <Compile Include="Assets\Scripts\Menu\Button.cs" />
      <Compile Include="Assets\Scripts\Menu\HelpMenu.cs" />
      <Compile Include="Assets\Scripts\Menu\Menu.cs" />
-     <Compile Include="Assets\Scripts\Scripts\Done_BGScroller.cs" />
-     <Compile Include="Assets\Scripts\Scripts\Done_DestroyByBoundary.cs" />
-     <Compile Include="Assets\Scripts\Scripts\Done_DestroyByContact.cs" />
-     <Compile Include="Assets\Scripts\Scripts\Done_DestroyByTime.cs" />
-     <Compile Include="Assets\Scripts\Scripts\Done_EvasiveManeuver.cs" />
-     <Compile Include="Assets\Scripts\Scripts\Done_GameController.cs" />
-     <Compile Include="Assets\Scripts\Scripts\Done_Mover.cs" />
-     <Compile Include="Assets\Scripts\Scripts\Done_PlayerController.cs" />
-     <Compile Include="Assets\Scripts\Scripts\Done_RandomRotator.cs" />
-     <Compile Include="Assets\Scripts\Scripts\Done_WeaponController.cs" />
-     <None Include="Assets\NewSurfaceShader.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
