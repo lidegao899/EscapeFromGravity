@@ -10,20 +10,12 @@ public class CamControler : MonoBehaviour {
 
 	public float run_speed=2f;
 
-
-	// Use this for initialization
 	void Start () {
 
 		player = GameObject.FindGameObjectWithTag ("Player");
 		playerinitPosition = player.transform.position;
 		initPosition = this.transform.position;
 		print (initPosition.z);
-
-
-		Vector3 vector=  this.GetComponent<Rigidbody> ().velocity;
-		this.GetComponent<Rigidbody> ().velocity =player.GetComponent<Rigidbody> ().velocity;
-
-
 	}
 	
 	// Update is called once per frame

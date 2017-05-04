@@ -9,13 +9,30 @@ public class PauseButton : MonoBehaviour {
 	[SerializeField] private Player  player;
 	[SerializeField] private GameObject PauseMenu;
 
+	[SerializeField] 	private Camera cam;
+	[SerializeField]    private Canvas canvas;
+
+	private int height;
+	private int width;
+	RectTransform rectTransform;
+	Vector2 posOfScreen;
+
+
 	private Vector2 pausePosition;
 	private Vector2 unPausePosition;
 	private bool isPause=false;
+
+	Vector2 pos;
+
 	void Start () {
-	
-		pausePosition = new Vector2 (250.2f,370);
-		unPausePosition = new Vector2 (-250.2f, 370);
+
+		height=Screen.height;
+		width= Screen.width;
+
+
+//		pos = new Vector2 (width-height/12, height * 11 / 12);
+
+
 	}
 	
 	// Update is called once per frame
@@ -45,16 +62,26 @@ public class PauseButton : MonoBehaviour {
 		
 			Time.timeScale = 0;
 			isPause = true;
-			PauseMenu.transform.position = pausePosition;
+//			PauseMenu.transform.position = pausePosition;
+
+			RectTransformUtility.ScreenPointToLocalPointInRectangle (canvas.transform as RectTransform,new Vector2(Screen.width/2,Screen.height/2), canvas.worldCamera, out posOfScreen);
+			rectTransform=PauseMenu.transform as RectTransform;
+			rectTransform.anchoredPosition = posOfScreen;
+
 
 		} else if(Time.timeScale==0&&player.fuelAmount>0)
 		{
-			PauseMenu.transform.position = unPausePosition;
+//			PauseMenu.transform.position = unPausePosition;
+
+			RectTransformUtility.ScreenPointToLocalPointInRectangle (canvas.transform as RectTransform, new Vector2(Screen.width*2,Screen.height*2), canvas.worldCamera, out posOfScreen);
+			rectTransform=PauseMenu.transform as RectTransform;
+			rectTransform.anchoredPosition = posOfScreen;
+
+
 			isPause = false;
 			Time.timeScale = 1;
 		
 		}
-		print ("mouse");
 
 			
 	

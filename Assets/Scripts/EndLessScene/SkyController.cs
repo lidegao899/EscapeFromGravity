@@ -14,9 +14,6 @@ public class SkyController : MonoBehaviour {
 
 		initPosition = this.transform.position;
 
-//		Vector3 vector = this.GetComponent<Rigidbody> ().velocity;
-//		vector.z = -verlosity;
-//		this.GetComponent<Rigidbody> ().velocity=vector;
 
 	}
 	
