@@ -7,11 +7,24 @@ public class Button : MonoBehaviour {
 
 	[SerializeField]	private GameObject ConfirmMenu;
 	[SerializeField]	private GameObject TargetMenu;
-	void Start () {
+	[SerializeField]	private GameObject HelpPic;
+	[SerializeField] 	private GameObject MenuObject;
 
-		//ComfirmMenu = GameObject.Find ("ComfirmMenu");
+	[SerializeField] 	private Camera cam;
+	[SerializeField]    private Canvas canvas;
+
+	private int height;
+	private int width;
+	RectTransform rectTransform;
+	Vector2 midOfScreen;
+
+	void Start () {
+		height=Screen.currentResolution.height;
+		width= Screen.currentResolution.width;
 
 	}
+
+
 	
 	// Update is called once per frame
 	void Update () {
@@ -50,15 +63,35 @@ public class Button : MonoBehaviour {
 
 		if (this.tag == "t_Exit") {
 
-			ConfirmMenu.transform.position = new Vector2 (250,375);
-			print ("Confirm");
+			Vector2 pos;
+			RectTransformUtility.ScreenPointToLocalPointInRectangle (canvas.transform as RectTransform, new Vector2(Screen.width/2,Screen.height/2), canvas.worldCamera, out pos);
+
+			rectTransform=ConfirmMenu.transform as RectTransform;
+
+			rectTransform.anchoredPosition = pos;
+
 
 		}
 
 		if (this.tag == "t_Help") {
 
 			print ("t_Help");
-			SceneManager.LoadScene (2);
+//			SceneManager.LoadScene (2);
+
+			RectTransformUtility.ScreenPointToLocalPointInRectangle (canvas.transform as RectTransform, new Vector2(Screen.width*2,Screen.height*2), canvas.worldCamera, out midOfScreen);
+			rectTransform = MenuObject.transform as RectTransform;
+
+			rectTransform.anchoredPosition = midOfScreen;
+
+			//			ConfirmMenu.transform.position = new Vector2 (800, 0);
+
+
+			RectTransformUtility.ScreenPointToLocalPointInRectangle (canvas.transform as RectTransform, new Vector2(Screen.width/2,Screen.height/2), canvas.worldCamera, out midOfScreen);
+			rectTransform=HelpPic.transform as RectTransform;
+
+			rectTransform.anchoredPosition = midOfScreen;
+
+
 
 		}
 
@@ -69,17 +102,50 @@ public class Button : MonoBehaviour {
 
 		}
 
+
 		if (this.tag == "No") {
 
 			print ("No");
-			ConfirmMenu.transform.position = new Vector2 (800, 0);
-			TargetMenu.transform.position=new Vector2 (250,375);
+
+			RectTransformUtility.ScreenPointToLocalPointInRectangle (canvas.transform as RectTransform, new Vector2(Screen.width*2,Screen.height*2), canvas.worldCamera, out midOfScreen);
+			rectTransform=ConfirmMenu.transform as RectTransform;
+			rectTransform.anchoredPosition = midOfScreen;
+
+//			ConfirmMenu.transform.position = new Vector2 (800, 0);
+
+
+			RectTransformUtility.ScreenPointToLocalPointInRectangle (canvas.transform as RectTransform, new Vector2(Screen.width/2,Screen.height/2), canvas.worldCamera, out midOfScreen);
+			rectTransform=TargetMenu.transform as RectTransform;
+
+			rectTransform.anchoredPosition = midOfScreen;
+
+		}
+
+		if (this.tag == "HelpPic") {
+
+			print ("HelpPic");
+
+			RectTransformUtility.ScreenPointToLocalPointInRectangle (canvas.transform as RectTransform, new Vector2(Screen.width*2,Screen.height*2), canvas.worldCamera, out midOfScreen);
+			rectTransform=HelpPic.transform as RectTransform;
+			rectTransform.anchoredPosition = midOfScreen;
+
+			//			ConfirmMenu.transform.position = new Vector2 (800, 0);
+
+
+			RectTransformUtility.ScreenPointToLocalPointInRectangle (canvas.transform as RectTransform, new Vector2(Screen.width/2,Screen.height/2), canvas.worldCamera, out midOfScreen);
+			rectTransform=MenuObject.transform as RectTransform;
+			rectTransform.anchoredPosition = midOfScreen;
+
 		}
 
 		if (this.tag == "Exit_No") {
 
-	
-			ConfirmMenu.transform.position = new Vector2 (800, 0);
+			Vector2 pos;
+			RectTransformUtility.ScreenPointToLocalPointInRectangle (canvas.transform as RectTransform, new Vector2(Screen.width*2,Screen.height*2), canvas.worldCamera, out pos);
+
+			rectTransform=ConfirmMenu.transform as RectTransform;
+
+			rectTransform.anchoredPosition = pos;
 
 		}
 

@@ -8,9 +8,12 @@ public class PlanetController : MonoBehaviour {
 	public GameObject[] Prefabs=new GameObject[5];
 	private PlayerController playercontroller;
 
-	private float timer=0f;
-	[SerializeField] float accelerateTime=0.97f;
-	[SerializeField] float initPlanetTimeGap=3f;
+	private float timer=6f;
+	float initPlanetTimeGap=5f;
+
+
+
+
 	void Start () {
 		
 //		playercontroller = GameObject.Find ("PlayerController");
@@ -18,7 +21,7 @@ public class PlanetController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void LateUpdate () {
+	void Update () {
 
 		makePlanet ();
 
@@ -28,13 +31,19 @@ public class PlanetController : MonoBehaviour {
 
 	void makePlanet(){
 		
-		timer += Time.deltaTime;
-		if (timer > 3) {
+		timer -= Time.deltaTime;
+
+//		print ("timer" + timer);
+		if (timer <0) {
 		
 			Instantiate (this.Prefabs[Random.Range(0,5)]);
-			timer = 0;
-			initPlanetTimeGap = initPlanetTimeGap*0.97f;
-//			print ("intitimeGAP"+(3f*0.97f));
+			if (initPlanetTimeGap > 2)
+				initPlanetTimeGap *=0.99f;
+			else
+				initPlanetTimeGap =2;
+			timer = initPlanetTimeGap;
+
+//			print (initPlanetTimeGap);
 //			print ("intitimeGAP"+initPlanetTimeGap);
 		}
 	

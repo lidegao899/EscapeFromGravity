@@ -16,6 +16,8 @@ public class Planet : MonoBehaviour {
 	private bool isHit=false;
 	private float planetSpeed=1f;
 
+
+
 	private PlayerController pc;
 
 	void Start () {
@@ -41,14 +43,24 @@ public class Planet : MonoBehaviour {
 	}
 
 	public void makePassbySound(){
-	
-		planetAudio.PlayOneShot (passbyAudio, 0.5f);
+		if (!isHit) {
+			
+			print ("make sound");
+			isHit = true;
+		}
+
+		if(!planetAudio.isPlaying) 
+			planetAudio.PlayOneShot (passbyAudio, 0.5f);
+
 	
 	}
 
 	void OnTriggerEnter(Collider collider){
 
-		makePassbySound ();
+		if (collider.tag == "Player") {
+			makePassbySound ();
+		}
+			
 
 	}
 	void OnTriggerExit(Collider collider){

@@ -2,8 +2,6 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System;
-using System.Collections;
-using System;
 
 
 [System.Serializable]
@@ -20,25 +18,34 @@ public class Player: MonoBehaviour {
 	// Use this for initialization
 
 	public float fuelAmount=100f;
-	public float fly_speed=1f;
+
 	public float flyDistance=0f;
+
+
 
 	private float StartTime;
 
 	private bool isInShell=false;
+	private bool isAccelerate = false;
 
-	private float shellAcceleration=0.1f;
-	private float passiveAcceleration=0.02f;
-	private float activeAcceleration=0.3f;
+	private float activeAccelerateSpeed=0.03f;
+	private float fly_Speed;
 
-	private float moveSpeed=0.04f;
-	private float activeBurnSpeed=1f;
-	private float moveBurnSpeed=1f;
+	private float moveSpeed=0.03f;
+
+
+	private float moveBurnSpeed=1.5f;
+	private float activeBurnSpeed=10f;
+	private float passiveBurnFuleSpeed=1.5f;
+	public float shellAddFuelSpeed=0.03f;
+
 
 	public Boundry boundry;
 
 	public AudioSource music;
 	public  AudioClip Crash;
+
+	private Vector3 ScrollVec;
 
 
 
@@ -50,11 +57,6 @@ public class Player: MonoBehaviour {
 	public GameObject dead_Explosion;
 
 	[SerializeField] private GameObject camer;
-	[SerializeField] private GameObject FailMenu;
-
-
-
-
 
 	private Animator playerAnimator;
 
@@ -105,7 +107,6 @@ public class Player: MonoBehaviour {
 
 		case PlayerController.playerStates.up:
 
-		
 			break;
 		case PlayerController.playerStates.down:
 
@@ -120,15 +121,14 @@ public class Player: MonoBehaviour {
 			break;
 		}
 
-
-
-
 	}
+		
+
 
 	public void Init(){
 		print ("init");
 		fuelAmount=100f;
-		fly_speed=1f;
+		shellAddFuelSpeed=1f;
 
 		print (StartTime);
 		StartTime=Time.time;
@@ -136,121 +136,137 @@ public class Player: MonoBehaviour {
 		print (StartTime);
 //		moveSpeed=0.02f;
 		Time.timeScale = 1;
-		FailMenu.transform.position=new Vector2 (500f, 300);
+
 	}
 
 
 	void Start () {
+		
+
+
 		GameObject pcontroller = GameObject.FindGameObjectWithTag ("PlayerController");
 		playercontroller = pcontroller.GetComponent<PlayerController> ();
-//		playercontroller.g
-		//获取自身的组件这么简单吗？？？
+
 		playerAnimator = GetComponent<Animator> ();
 
 
 		music.Play ();
-		this.GetComponent<Rigidbody> ().useGravity = false;
-		Vector3 vector = this.GetComponent<Rigidbody> ().velocity;
-		vector.z = fly_speed;
-//		this.GetComponent<Rigidbody> ().velocity = vector;
+//		this.GetComponent<Rigidbody> ().useGravity = false;
 
-	
+
+		ScrollVec = new Vector3 ();
 	}
 
-	void FixedUpdate(){
-		
-//		print ("dedaosudu"+playercontroller.getSpeed ());
-//		print("平滑移动啦"+Input.GetAxis("Horizontal"));
-		Vector3 vector = getPosition();
 
-		float moveHorizontal = Input.GetAxis ("Horizontal");
-		float moveVertical = Input.GetAxis ("Vertical");
-
-		Vector3 moment = new Vector3 (moveHorizontal, 0,moveVertical);
-
-		vector+=moment*moveSpeed;
-		this.transform.position = vector;
-		this.transform.position = new Vector3 (Mathf.Clamp (vector.x,boundry.Xmin,boundry.Xmax), vector.y, Mathf.Clamp (vector.z,boundry.Zmin, boundry.Zmax));
-		moveBrunFuel ();
-
-		if (Input.GetKey (KeyCode.R)) {
-
-			//提前初始化；
-
-			Init ();
-			SceneManager.LoadScene (1);
-
-		}
-
+	public void getScroll(Vector2 vec){
+		ScrollVec.x = vec.x;
+		ScrollVec.z = vec.y;
+		print ("ScrollVec" + ScrollVec.ToString ());
 	}
 
+	public void getScroll(Vector3 vec){
+
+		ScrollVec.x = vec.x;
+		ScrollVec.z = vec.y;
+		print (vec.ToString ());
+
+	}
 
 	// Update is called once per frame
 	void Update () {
 
 
+		if (fuelAmount <= 0)
+			dead ();
 
-		//有命才能动,死后可以空格续命,不断加速 
-		if (isAlive ()) {
+		addFlyDistance ();
 
-			addFlyDistance ();
-//			passiveAccelerate ();
+		Vector3 vector = getPosition();
 
-//			playercontroller.passiveAccelerate ();
-//			if (isInShell) {
-//			
-////				shellAddFuel ();
-////				shellAccelerate ();
-//
-//				
-//			}
-				
+		float moveHorizontal = Input.GetAxis ("Horizontal");
+		float moveVertical = Input.GetAxis ("Vertical");
+
+
+
+		Vector3 moment = new Vector3 (moveHorizontal, 0,moveVertical);
+
+
+
+		if (isAccelerate) {
 		
-		} else {
-			
-			print ("deadd");
-			liveStateChange (Player.liveStates.dead);
-
+			print ("acc");
+			vector+=(moment+ScrollVec)*(moveSpeed+activeAccelerateSpeed);
+			activeBrunFuel ();
 		}
+		else
+			vector+=(moment+ScrollVec)*moveSpeed;
+
+		//burn fuel when move
+		//get in shell would not burn fuel
+		if ((moment+ScrollVec).magnitude != 0&&!isInShell) {
+			moveBrunFuel ();
+		}
+
+
+		if (isInShell)
+			shellAddFuel ();
+		else
+			passiveBurnFule ();
+//		print (fuelAmount);
+
+		this.transform.position = vector;
+		this.transform.position = new Vector3 (Mathf.Clamp (vector.x,boundry.Xmin,boundry.Xmax), vector.y, Mathf.Clamp (vector.z,boundry.Zmin, boundry.Zmax));
+
+
+	
 			
-
-
 	}
 
 
 	private void shellAddFuel(){
 
-		fuelAmount += Time.deltaTime*fly_speed*0.1f;
 
+		fly_Speed= playercontroller.getSpeed ();
+
+
+		fuelAmount += Time.deltaTime*shellAddFuelSpeed*fly_Speed;
+//		print ("shelll add "+fuelAmount);
 	}
-
-
-
-
-
+		
 	public void activeBrunFuel(){
 
 		fuelAmount -= Time.deltaTime*activeBurnSpeed;
+		print ("active burn fuel");
 	
 	}
-
+		
 	private void moveBrunFuel(){
 
 		fuelAmount -= Time.deltaTime*moveBurnSpeed;
+//		print (fuelAmount);
 
+	}
 
+	private void passiveBurnFule(){
+
+		fuelAmount -= Time.deltaTime*passiveBurnFuleSpeed;
+//		print ("passive burn" + fuelAmount);
+	}
+
+	IEnumerator kkkk(){
+		print("死啦1");
+		yield return new WaitForSeconds (3);
+		print("死啦2");
+	
 	}
 
 	void dead(){
 		
-		//liveStateChange (PlayerScript.liveStates.dead);
-		//GameState(this,EventArgs.Empty);
-
+		liveStateChange (Player.liveStates.dead);
 		Instantiate (dead_Explosion, this.transform.position,this.transform.rotation);
 
 
 
-		fly_speed = 0f;
 		fuelAmount = 0f;
 //		Time.timeScale=0f;
 
@@ -261,8 +277,6 @@ public class Player: MonoBehaviour {
 			//print ("播放音频");
 		
 		}
-
-		FailMenu.transform.position=new Vector2 (250f, 370);
 
 		Destroy (this.gameObject);
 
@@ -275,59 +289,46 @@ public class Player: MonoBehaviour {
 	}
 
 
+	public void getAccelerationCondition(){
+	
+		isAccelerate =!isAccelerate;
+	
+	}
+
+
 	void OnCollisionEnter(Collision collision){
 
 		print ("碰撞啦");
-
-		//fuelAmount = -1;
-
-
-//		OnDisable ();
-//		OnDisable();
 		dead ();
-		liveStateChange (Player.liveStates.dead);
-
 	}
 
 
 
+	void OnTriggerEnter(Collider collider){
+
+
+		if (collider.tag == "Planet") {
+			print("进入引力场");
+			isInShell = true;
+//			print ("start add fuel" + fuelAmount);
+		}
+
+	
+	}
 
 	void OnTriggerStay(Collider collider){
-
-		//shellAccelerate ();
-
-//		print("player保持引力场");
-
-
-		playercontroller.shellAccelerate();
-
-		shellAddFuel ();
+				
 	}
 
 
 	void OnTriggerExit(Collider collider){
 
-		isInShell = false;
+		if (collider.tag == "Planet") {
+			print("出引力场");
+			isInShell = false;print ("end add fuel" + fuelAmount);
 
-	}
-
-
-	private void addFuel(){
-
-		if (Input.GetKey (KeyCode.Space)&&!isAlive ()) {
-
-			Time.timeScale = 1;
-			fuelAmount += 10;
-			print ("back to live");
-
-		} 
-
-	}
-		
-	public bool isAlive(){
-	
-		return fuelAmount >0;
-	
+		}
+			
 	}
 
 	public void addFlyDistance(){

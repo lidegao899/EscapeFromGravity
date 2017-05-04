@@ -1,0 +1,8 @@
+Library
+obj
+
+*.csproj
+*.dll
+*.meta
+*.sln
+
